@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.2](https://github.com/erickg123/ng-architect-cli/compare/v0.1.1...v0.1.2) (2026-07-28)
+
+
+### 🚀 Features
+
+* melhorias no README ([52aaa68](https://github.com/erickg123/ng-architect-cli/commit/52aaa6852819f9b3415d440d2805b97783240a40))
+
 ## [0.1.1](https://github.com/erickg123/ng-architect-cli/compare/v0.1.0...v0.1.1) (2026-07-28)
 
 
