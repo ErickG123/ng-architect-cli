@@ -47,7 +47,7 @@ jobs:
           expect -c '
           set timeout 300
           
-          spawn env FORCE_COLOR=0 create-ng-arch
+          spawn env FORCE_COLOR=0 COLUMNS=120 create-ng-arch
           
           expect "Qual é o nome"
           sleep 0.5
