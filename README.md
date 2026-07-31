@@ -37,6 +37,7 @@ npm run dev
 ```
 
 A CLI abrirá um menu interativo extremamente visual (graças ao `@clack/prompts`) e pedirá as seguintes informações:
+
 1. **Nome do projeto**
 2. **Gerenciador de pacotes** (npm, pnpm, yarn)
 3. **Se deseja utilizar o Zoneless Change Detection**
@@ -76,37 +77,46 @@ src/
 
 ## 🔄 Fluxo de Versionamento e Lançamento (Release)
 
-Este projeto utiliza **Conventional Commits** e versionamento semântico automatizado. Nunca altere a versão no `package.json` manualmente. 
+Este projeto utiliza **Conventional Commits** e versionamento semântico automatizado. Nunca altere a versão no `package.json` manualmente.
 
 Para criar um novo lançamento, siga o fluxo abaixo:
 
 ### 1. Faça seus Commits
+
 O projeto utiliza Husky para validar as mensagens de commit.
+
 ```bash
 git add .
 git commit -m "feat: adiciona suporte ao PrimeNG" # Exemplo de nova funcionalidade
 ```
 
 ### 2. Gere a Versão e o Changelog
+
 Este comando lerá seus commits, atualizará a versão no `package.json`, gerará/atualizará o `CHANGELOG.md` e criará a Tag no Git.
+
 ```bash
 npm run release
 ```
 
 ### 3. Dispare o Deploy (GitHub Actions)
+
 Envie o código e as tags para o repositório. Isso fará com que o GitHub Actions builde o projeto, gere a release note visual e publique o pacote automaticamente no GitHub Packages.
+
 ```bash
 git push origin main --follow-tags
 ```
 
 ### 🧠 Regras de Versionamento (SemVer)
+
 A automação decide o salto de versão baseada no prefixo do seu commit:
+
 - **Patch** (0.1.0 ➔ 0.1.1): Use o prefixo `fix:` para correções de bugs.
 - **Minor** (0.1.0 ➔ 0.2.0): Use o prefixo `feat:` para novas funcionalidades.
 - **Major** (0.1.0 ➔ 1.0.0): Adicione uma exclamação (`feat!:`) ou um rodapé `BREAKING CHANGE:` para mudanças incompatíveis. Para forçar manualmente, rode `npm run release:major`.
 
 ## 🗺️ Próximos Passos (Roadmap)
-*(Planejamento de evoluções futuras da CLI)*
+
+_(Planejamento de evoluções futuras da CLI)_
 
 ---
 

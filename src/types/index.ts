@@ -4,4 +4,8 @@ export interface CliAnswers {
   zoneless: boolean;
   uiLibrary: "tailwind" | "primeng" | "material" | "none";
   stateManagement: "ngrx-signals" | "none";
+  initialTemplate: "blank" | "dashboard";
+  docker: boolean;
+  linting: boolean;
+  ci: boolean;
 }

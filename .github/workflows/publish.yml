@@ -4,9 +4,77 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag para fazer deploy (ex: v1.0.0)'
+        required: true
+        type: string
 
 jobs:
+  validate-cli:
+    name: Validação E2E (Failsafe)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar repositório
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: ⚙️ Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: 📦 Instalar dependências da CLI
+        run: npm ci
+
+      - name: 🔨 Compilar CLI
+        run: npm run build
+
+      - name: 🔗 Link da CLI (Global)
+        run: npm link
+
+      - name: 🤖 Instalar Expect para interagir com os Prompts
+        run: sudo apt-get update && sudo apt-get install -y expect
+
+      - name: 🧪 Gerar Projeto Dummy com Expect
+        run: |
+          mkdir /tmp/dummy-project
+          cd /tmp/dummy-project
+          
+          expect -c '
+          set timeout 60
+          
+          spawn create-ng-arch
+          
+          expect "Qual é o nome"
+          send "dummy-app\r"
+          
+          expect "Qual gerenciador"
+          send "\r"
+          
+          expect "Zoneless"
+          send "\r"
+          
+          expect "biblioteca de UI"
+          send "\r"
+          
+          expect "SignalStore"
+          send "\r"
+          
+          expect eof
+          '
+          
+      - name: 🏗️ Validar Build do Projeto Gerado
+        run: |
+          cd /tmp/dummy-project/dummy-app
+          npm run build
+
   build-and-publish:
+    name: Publicar
+    needs: validate-cli
     runs-on: ubuntu-latest
 
     permissions:
@@ -16,6 +84,8 @@ jobs:
     steps:
       - name: 📥 Clonar repositório
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
 
       - name: ⚙️ Configurar Node.js
         uses: actions/setup-node@v4
@@ -37,4 +107,5 @@ jobs:
       - name: 📝 Criar GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           generate_release_notes: true
