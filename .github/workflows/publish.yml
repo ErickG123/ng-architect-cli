@@ -45,35 +45,44 @@ jobs:
           cd /tmp/dummy-project
           
           expect -c '
-          set timeout -1
+          set timeout 300
           
-          spawn create-ng-arch
+          spawn env FORCE_COLOR=0 create-ng-arch
           
           expect "Qual é o nome"
+          sleep 0.5
           send "dummy-app\r"
           
-          expect "Qual gerenciador"
+          expect "gerenciador"
+          sleep 0.5
           send "\r"
           
           expect "Zoneless"
+          sleep 0.5
           send "\r"
           
           expect "biblioteca de UI"
+          sleep 0.5
           send "\r"
           
           expect "SignalStore"
+          sleep 0.5
           send "\r"
           
           expect "Template Inicial"
+          sleep 0.5
           send "\r"
           
           expect "Dockerfile"
+          sleep 0.5
           send "\r"
           
           expect "ESLint"
+          sleep 0.5
           send "\r"
           
           expect "workflow de CI"
+          sleep 0.5
           send "\r"
           
           expect eof
