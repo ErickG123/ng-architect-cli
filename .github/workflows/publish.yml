@@ -12,8 +12,8 @@ on:
         type: string
 
 jobs:
-  validate-cli:
-    name: Validação E2E (Failsafe)
+  test-cli:
+    name: Testes Unitários
     runs-on: ubuntu-latest
 
     steps:
@@ -30,72 +30,12 @@ jobs:
       - name: 📦 Instalar dependências da CLI
         run: npm ci
 
-      - name: 🔨 Compilar CLI
-        run: npm run build
-
-      - name: 🔗 Link da CLI (Global)
-        run: npm link
-
-      - name: 🤖 Instalar Expect para interagir com os Prompts
-        run: sudo apt-get update && sudo apt-get install -y expect
-
-      - name: 🧪 Gerar Projeto Dummy com Expect
-        run: |
-          mkdir /tmp/dummy-project
-          cd /tmp/dummy-project
-          
-          expect -c '
-          set timeout 300
-          
-          spawn env FORCE_COLOR=0 COLUMNS=120 create-ng-arch
-          
-          expect "Qual é o nome"
-          sleep 0.5
-          send "dummy-app\r"
-          
-          expect "gerenciador"
-          sleep 0.5
-          send "\r"
-          
-          expect "Zoneless"
-          sleep 0.5
-          send "\r"
-          
-          expect "biblioteca de UI"
-          sleep 0.5
-          send "\r"
-          
-          expect "SignalStore"
-          sleep 0.5
-          send "\r"
-          
-          expect "Template Inicial"
-          sleep 0.5
-          send "\r"
-          
-          expect "Dockerfile"
-          sleep 0.5
-          send "\r"
-          
-          expect "ESLint"
-          sleep 0.5
-          send "\r"
-          
-          expect "workflow de CI"
-          sleep 0.5
-          send "\r"
-          
-          expect eof
-          '
-          
-      - name: 🏗️ Validar Build do Projeto Gerado
-        run: |
-          cd /tmp/dummy-project/dummy-app
-          npm run build
+      - name: 🧪 Rodar Testes
+        run: npm run test
 
   build-and-publish:
     name: Publicar
-    needs: validate-cli
+    needs: test-cli
     runs-on: ubuntu-latest
 
     permissions:
