@@ -9,7 +9,7 @@ Para rodar o projeto e testar suas alterações localmente, siga estes passos:
 1. Faça um **Fork** deste repositório clicando no botão "Fork" no canto superior direito da página do GitHub.
 2. Clone o seu fork para a sua máquina:
    ```bash
-   git clone https://github.com/SEU-USUARIO/ng-architect-cli.git
+   git clone https://github.com/ErickG123/ng-architect-cli.git
    cd ng-architect-cli
    ```
 3. Instale as dependências usando NPM:
