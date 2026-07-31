@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0](https://github.com/erickg123/ng-architect-cli/compare/v0.1.2...v0.2.0) (2026-07-31)
+
+
+### 🐛 Bug Fixes
+
+* **scaffold:** corrige sintaxe do app.config.ts gerado e ajusta os testes de mock e templates ([4bc296b](https://github.com/erickg123/ng-architect-cli/commit/4bc296bd82de8ebec8d213fce81a0f28a5d89ba9))
+
 ## [0.1.2](https://github.com/erickg123/ng-architect-cli/compare/v0.1.1...v0.1.2) (2026-07-28)
 
 ### 🚀 Features
