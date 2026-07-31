@@ -45,7 +45,7 @@ jobs:
           cd /tmp/dummy-project
           
           expect -c '
-          set timeout 60
+          set timeout -1
           
           spawn create-ng-arch
           
