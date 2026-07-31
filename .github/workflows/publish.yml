@@ -64,6 +64,18 @@ jobs:
           expect "SignalStore"
           send "\r"
           
+          expect "Template Inicial"
+          send "\r"
+          
+          expect "Dockerfile"
+          send "\r"
+          
+          expect "ESLint"
+          send "\r"
+          
+          expect "workflow de CI"
+          send "\r"
+          
           expect eof
           '
           
