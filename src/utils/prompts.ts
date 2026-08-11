@@ -127,6 +127,26 @@ export async function askUserPrompts(): Promise<CliAnswers> {
     process.exit(0);
   }
 
+  const modernTests = await p.confirm({
+    message: "Deseja configurar uma infraestrutura de Testes Modernos (Vitest + Playwright)?",
+    initialValue: true,
+  });
+
+  if (p.isCancel(modernTests)) {
+    p.cancel("Operação cancelada pelo usuário.");
+    process.exit(0);
+  }
+
+  const storybook = await p.confirm({
+    message: "Deseja adicionar o Storybook para documentação de componentes (Design System)?",
+    initialValue: true,
+  });
+
+  if (p.isCancel(storybook)) {
+    p.cancel("Operação cancelada pelo usuário.");
+    process.exit(0);
+  }
+
   return {
     projectName: projectName as string,
     packageManager: packageManager as CliAnswers["packageManager"],
@@ -137,5 +157,7 @@ export async function askUserPrompts(): Promise<CliAnswers> {
     docker: docker as boolean,
     linting: linting as boolean,
     ci: ci as boolean,
+    modernTests: modernTests as boolean,
+    storybook: storybook as boolean,
   };
 }

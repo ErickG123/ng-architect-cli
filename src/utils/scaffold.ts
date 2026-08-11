@@ -141,6 +141,28 @@ allowBuilds:
       pkg.devDependencies["lint-staged"] = "latest";
     }
 
+    if (answers.modernTests) {
+      pkg.scripts = pkg.scripts || {};
+      pkg.scripts["test"] = "vitest run";
+      pkg.scripts["e2e"] = "playwright test";
+
+      pkg.devDependencies["vitest"] = "latest";
+      pkg.devDependencies["@analogjs/vite-plugin-angular"] = "latest";
+      pkg.devDependencies["jsdom"] = "latest";
+      pkg.devDependencies["@playwright/test"] = "latest";
+    }
+
+    if (answers.storybook) {
+      pkg.scripts = pkg.scripts || {};
+      pkg.scripts["storybook"] = "storybook dev -p 6006";
+      pkg.scripts["build-storybook"] = "storybook build";
+
+      pkg.devDependencies["@storybook/angular"] = "latest";
+      pkg.devDependencies["@storybook/addon-essentials"] = "latest";
+      pkg.devDependencies["@storybook/addon-interactions"] = "latest";
+      pkg.devDependencies["storybook"] = "latest";
+    }
+
     fs.writeJsonSync(pkgPath, pkg, { spaces: 2 });
 
     if (answers.stateManagement === "none") {
@@ -568,5 +590,92 @@ export class ThemeService {
 </div>
 `;
     fs.writeFileSync(appComponentHtmlPath, appComponentHtmlContent, "utf-8");
+  }
+  if (answers.modernTests) {
+    const vitestConfigPath = path.join(targetDir, "vitest.config.ts");
+    const vitestConfigContent = `import { defineConfig } from 'vitest/config';
+import angular from '@analogjs/vite-plugin-angular';
+
+export default defineConfig({
+  plugins: [angular()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['src/test-setup.ts'],
+    include: ['src/**/*.spec.ts'],
+  },
+});
+`;
+    fs.writeFileSync(vitestConfigPath, vitestConfigContent, "utf-8");
+
+    const playwrightConfigPath = path.join(targetDir, "playwright.config.ts");
+    const playwrightConfigContent = `import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:4200',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+});
+`;
+    fs.writeFileSync(playwrightConfigPath, playwrightConfigContent, "utf-8");
+
+    const testSetupPath = path.join(targetDir, "src/test-setup.ts");
+    const testSetupContent = `import 'zone.js';
+import 'zone.js/testing';
+import { getTestBed } from '@angular/core/testing';
+import {
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting
+} from '@angular/platform-browser-dynamic/testing';
+
+getTestBed().initTestEnvironment(
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting(),
+);
+`;
+    fs.writeFileSync(testSetupPath, testSetupContent, "utf-8");
+  }
+
+  if (answers.storybook) {
+    const storybookDirPath = path.join(targetDir, ".storybook");
+    fs.ensureDirSync(storybookDirPath);
+
+    const mainTsPath = path.join(storybookDirPath, "main.ts");
+    const mainTsContent = `import type { StorybookConfig } from "@storybook/angular";
+const config: StorybookConfig = {
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  addons: ["@storybook/addon-essentials", "@storybook/addon-interactions"],
+  framework: { name: "@storybook/angular", options: {} },
+};
+export default config;
+`;
+    fs.writeFileSync(mainTsPath, mainTsContent, "utf-8");
+
+    const previewTsPath = path.join(storybookDirPath, "preview.ts");
+    const previewTsContent = `import type { Preview } from "@storybook/angular";
+import "../src/styles.scss"; // Importa as bases do Tailwind e PrimeNG
+
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: "^on[A-Z].*" },
+    controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
+  },
+};
+export default preview;
+`;
+    fs.writeFileSync(previewTsPath, previewTsContent, "utf-8");
   }
 }

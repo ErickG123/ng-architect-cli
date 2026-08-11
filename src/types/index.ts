@@ -8,4 +8,6 @@ export interface CliAnswers {
   docker: boolean;
   linting: boolean;
   ci: boolean;
+  modernTests: boolean;
+  storybook: boolean;
 }

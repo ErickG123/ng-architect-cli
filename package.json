@@ -1,6 +1,6 @@
 {
   "name": "@erickg123/ng-architect-cli",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -25,13 +25,15 @@
   "dependencies": {
     "@clack/prompts": "^0.7.0",
     "fs-extra": "^11.4.0",
-    "picocolors": "^1.0.0"
+    "picocolors": "^1.0.0",
+    "update-notifier": "^7.3.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.0.0",
+    "@types/update-notifier": "^6.0.8",
     "commit-and-tag-version": "^12.5.0",
     "husky": "^9.1.7",
     "tsup": "^8.0.0",
